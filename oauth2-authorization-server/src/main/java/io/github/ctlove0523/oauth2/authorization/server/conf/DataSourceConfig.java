@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
@@ -20,7 +21,6 @@ public class DataSourceConfig {
     @Value("classpath:ddl/data_init.sql")
     private Resource initScript;
 
-
     @Bean
     public DataSource mysqlDataSource() {
         HikariConfig config = new HikariConfig();
@@ -34,6 +34,11 @@ public class DataSourceConfig {
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 
         return new HikariDataSource(config);
+    }
+
+    @Bean
+    public JdbcTemplate getJdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
     }
 
     /**
